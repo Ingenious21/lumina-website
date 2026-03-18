@@ -22,7 +22,7 @@ export default function HomePage() {
           {/* Eyebrow */}
           <div className="inline-flex items-center gap-2 bg-[#27c4a0]/12 border border-[#27c4a0]/25 rounded-full px-4 py-1.5 mb-8">
             <div className="w-1.5 h-1.5 rounded-full bg-[#27c4a0] animate-pulse"></div>
-            <span className="text-[#4dd9b8] text-xs font-medium tracking-widest uppercase">Monrovia, Liberia — Est. 2020</span>
+            <span className="text-[#4dd9b8] text-xs font-medium tracking-widest uppercase">Monrovia, Liberia — Est. 2025</span>
           </div>
 
           {/* Headline */}
