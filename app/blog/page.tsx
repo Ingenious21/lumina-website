@@ -1,61 +1,5 @@
 import Link from 'next/link'
-
-const posts = [
-  {
-    slug: 'liberia-digital-economy-2025',
-    title: 'The State of Liberia\'s Digital Economy in 2025',
-    excerpt: 'A comprehensive look at how Liberian businesses are adopting digital tools — and where the biggest opportunities still lie untapped.',
-    category: 'Industry Insight',
-    date: 'March 2025',
-    readTime: '6 min read',
-    color: 'from-[#0d4f47] to-[#138a7a]',
-  },
-  {
-    slug: 'cybersecurity-smes-liberia',
-    title: '5 Cybersecurity Basics Every Liberian SME Should Have in 2025',
-    excerpt: 'You don\'t need an enterprise budget to protect your business. Here\'s what every small business should have in place right now.',
-    category: 'Cybersecurity',
-    date: 'February 2025',
-    readTime: '5 min read',
-    color: 'from-[#1a2f1a] to-[#2d5a2d]',
-  },
-  {
-    slug: 'brand-identity-mistakes',
-    title: '7 Brand Identity Mistakes That Are Costing You Clients',
-    excerpt: 'From inconsistent logos to fonts that don\'t match your audience — the branding errors we see most often, and how to fix them.',
-    category: 'Branding',
-    date: 'January 2025',
-    readTime: '4 min read',
-    color: 'from-[#051f1c] to-[#0a3330]',
-  },
-  {
-    slug: 'why-liberian-businesses-need-websites',
-    title: 'Why Every Liberian Business Needs a Professional Website in 2025',
-    excerpt: 'Still running your business on Facebook? Here\'s why a professional website is no longer optional for businesses in Liberia.',
-    category: 'Industry Insight',
-    date: 'January 2025',
-    readTime: '5 min read',
-    color: 'from-[#1a1a2e] to-[#0d4f47]',
-  },
-  {
-    slug: 'data-analysis-small-business',
-    title: 'How Small Businesses in Liberia Can Use Data to Grow',
-    excerpt: 'You don\'t need a data science team to make smarter decisions. Here\'s how simple data analysis can transform your business.',
-    category: 'Data Analysis',
-    date: 'December 2024',
-    readTime: '7 min read',
-    color: 'from-[#0d2d4f] to-[#1a5a8a]',
-  },
-  {
-    slug: 'lumina-pulse-march-2025',
-    title: 'Lumina Pulse — March 2025',
-    excerpt: 'This month: Liberia\'s new digital payment regulations, why AI won\'t replace your team, and a spotlight on a Monrovia startup.',
-    category: 'Lumina Pulse',
-    date: 'March 2025',
-    readTime: '8 min read',
-    color: 'from-[#2d1a4a] to-[#5a3d8a]',
-  },
-]
+import { client, urlFor } from '@/lib/sanity'
 
 const categoryColors: Record<string, string> = {
   'Industry Insight': 'bg-[#edfdf9] text-[#0f6b60]',
@@ -63,9 +7,36 @@ const categoryColors: Record<string, string> = {
   'Branding': 'bg-[#fce7f3] text-[#9d174d]',
   'Data Analysis': 'bg-[#eff6ff] text-[#1d4ed8]',
   'Lumina Pulse': 'bg-[#f5f3ff] text-[#6d28d9]',
+  'Software': 'bg-[#f0fdf4] text-[#15803d]',
 }
 
-export default function BlogPage() {
+const gradients = [
+  'from-[#0d4f47] to-[#138a7a]',
+  'from-[#1a2f1a] to-[#2d5a2d]',
+  'from-[#051f1c] to-[#0a3330]',
+  'from-[#1a1a2e] to-[#0d4f47]',
+  'from-[#0d2d4f] to-[#1a5a8a]',
+  'from-[#2d1a4a] to-[#5a3d8a]',
+]
+
+async function getPosts() {
+  const posts = await client.fetch(`
+    *[_type == "post"] | order(publishedAt desc) {
+      _id,
+      title,
+      slug,
+      excerpt,
+      category,
+      publishedAt,
+      coverImage,
+    }
+  `)
+  return posts
+}
+
+export default async function BlogPage() {
+  const posts = await getPosts()
+
   return (
     <main>
       {/* HERO */}
@@ -92,69 +63,92 @@ export default function BlogPage() {
       {/* BLOG GRID */}
       <section className="bg-[#f8f9f8] py-24 px-[5%]">
         <div className="max-w-[1200px] mx-auto">
-
-          {/* Featured post */}
-          <Link href={`/blog/${posts[0].slug}`} className="group block mb-10">
-            <div className="bg-white border border-[#e0e4e0] rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-xl hover:border-[#c5f7ef] transition-all grid grid-cols-1 md:grid-cols-2">
-              <div className={`h-64 md:h-auto bg-gradient-to-br ${posts[0].color} relative overflow-hidden`}>
-                <div className="absolute inset-0 opacity-10" style={{
-                  backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
-                  backgroundSize: '20px 20px'
-                }}></div>
-                <div className="absolute top-4 left-4 bg-[#27c4a0] text-[#051f1c] text-[11px] font-bold px-3 py-1 rounded-full">
-                  Featured
-                </div>
-              </div>
-              <div className="p-10 flex flex-col justify-center">
-                <span className={`text-[11px] font-bold px-3 py-1 rounded-full inline-block w-fit mb-4 ${categoryColors[posts[0].category]}`}>
-                  {posts[0].category}
-                </span>
-                <h2 className="font-display text-[24px] font-bold text-[#181e18] leading-tight mb-4 group-hover:text-[#0f6b60] transition-colors">
-                  {posts[0].title}
-                </h2>
-                <p className="text-[#5a665a] text-[15px] font-light leading-relaxed mb-6">
-                  {posts[0].excerpt}
-                </p>
-                <div className="flex items-center gap-4 text-[13px] text-[#9aa49a]">
-                  <span>{posts[0].date}</span>
-                  <span>·</span>
-                  <span>{posts[0].readTime}</span>
-                </div>
-              </div>
+          {posts.length === 0 ? (
+            <div className="text-center py-24">
+              <div className="text-[#9aa49a] text-[16px] font-light">No posts published yet. Check back soon.</div>
             </div>
-          </Link>
-
-          {/* Rest of posts */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {posts.slice(1).map((post, i) => (
-              <Link key={i} href={`/blog/${post.slug}`} className="group block bg-white border border-[#e0e4e0] rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-xl hover:border-[#c5f7ef] transition-all">
-                <div className={`h-44 bg-gradient-to-br ${post.color} relative overflow-hidden`}>
-                  <div className="absolute inset-0 opacity-10" style={{
-                    backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
-                    backgroundSize: '18px 18px'
-                  }}></div>
-                  <div className="absolute top-4 left-4">
-                    <span className={`text-[11px] font-bold px-3 py-1 rounded-full ${categoryColors[post.category]}`}>
-                      {post.category}
-                    </span>
+          ) : (
+            <>
+              {/* Featured post */}
+              <Link href={`/blog/${posts[0].slug.current}`} className="group block mb-10">
+                <div className="bg-white border border-[#e0e4e0] rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-xl hover:border-[#c5f7ef] transition-all grid grid-cols-1 md:grid-cols-2">
+                  <div className={`bg-gradient-to-br ${gradients[0]} relative overflow-hidden min-h-[320px]`}>
+                    {posts[0].coverImage ? (
+                      <img
+                        src={urlFor(posts[0].coverImage).width(800).height(600).fit('crop').url()}
+                        alt={posts[0].title}
+                        className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 opacity-10" style={{
+                        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
+                        backgroundSize: '20px 20px'
+                      }}></div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    <div className="absolute top-4 left-4 bg-[#27c4a0] text-[#051f1c] text-[11px] font-bold px-3 py-1 rounded-full z-10">
+                      Featured
+                    </div>
                   </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="font-display text-[17px] font-bold text-[#181e18] leading-tight mb-3 group-hover:text-[#0f6b60] transition-colors">
-                    {post.title}
-                  </h3>
-                  <p className="text-[#5a665a] text-[14px] font-light leading-relaxed mb-4">
-                    {post.excerpt}
-                  </p>
-                  <div className="flex items-center gap-3 text-[12px] text-[#9aa49a]">
-                    <span>{post.date}</span>
-                    <span>·</span>
-                    <span>{post.readTime}</span>
+                  <div className="p-10 flex flex-col justify-center">
+                    <span className={`text-[11px] font-bold px-3 py-1 rounded-full inline-block w-fit mb-4 ${categoryColors[posts[0].category] || 'bg-[#edfdf9] text-[#0f6b60]'}`}>
+                      {posts[0].category}
+                    </span>
+                    <h2 className="font-display text-[24px] font-bold text-[#181e18] leading-tight mb-4 group-hover:text-[#0f6b60] transition-colors">
+                      {posts[0].title}
+                    </h2>
+                    <p className="text-[#5a665a] text-[15px] font-light leading-relaxed mb-6">
+                      {posts[0].excerpt}
+                    </p>
+                    <div className="text-[13px] text-[#9aa49a]">
+                      {posts[0].publishedAt ? new Date(posts[0].publishedAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : ''}
+                    </div>
                   </div>
                 </div>
               </Link>
-            ))}
-          </div>
+
+              {/* Rest of posts */}
+              {posts.length > 1 && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {posts.slice(1).map((post: any, i: number) => (
+                    <Link key={post._id} href={`/blog/${post.slug.current}`} className="group block bg-white border border-[#e0e4e0] rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-xl hover:border-[#c5f7ef] transition-all">
+                      <div className={`h-52 bg-gradient-to-br ${gradients[(i + 1) % gradients.length]} relative overflow-hidden`}>
+                        {post.coverImage ? (
+                          <img
+                            src={urlFor(post.coverImage).width(600).height(400).fit('crop').url()}
+                            alt={post.title}
+                            className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 opacity-10" style={{
+                            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
+                            backgroundSize: '18px 18px'
+                          }}></div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+                        <div className="absolute top-4 left-4 z-10">
+                          <span className={`text-[11px] font-bold px-3 py-1 rounded-full ${categoryColors[post.category] || 'bg-[#edfdf9] text-[#0f6b60]'}`}>
+                            {post.category}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-6">
+                        <h3 className="font-display text-[17px] font-bold text-[#181e18] leading-tight mb-3 group-hover:text-[#0f6b60] transition-colors">
+                          {post.title}
+                        </h3>
+                        <p className="text-[#5a665a] text-[14px] font-light leading-relaxed mb-4">
+                          {post.excerpt}
+                        </p>
+                        <div className="text-[12px] text-[#9aa49a]">
+                          {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : ''}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
         </div>
       </section>
 

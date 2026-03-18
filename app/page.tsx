@@ -84,9 +84,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Link href="/services/technology" className="bg-white border border-[#e0e4e0] rounded-2xl p-11 hover:-translate-y-1 hover:shadow-xl hover:border-[#c5f7ef] transition-all group block">
               <div className="w-14 h-14 rounded-2xl bg-[#edfdf9] flex items-center justify-center mb-7 group-hover:bg-[#c5f7ef] transition-colors">
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M8 10L4 14L8 18M20 10L24 14L20 18M15 6L13 22" stroke="#0f6b60" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <span className="text-2xl">⚙️</span>
               </div>
               <h3 className="font-display text-2xl font-bold text-[#181e18] mb-3">Technology & Engineering</h3>
               <p className="text-[#5a665a] text-[15px] font-light leading-relaxed mb-7">
@@ -97,16 +95,14 @@ export default function HomePage() {
                   <span key={tag} className="text-xs font-medium text-[#0f6b60] bg-[#edfdf9] border border-[#c5f7ef] px-3 py-1 rounded-full">{tag}</span>
                 ))}
               </div>
-              <span className="text-[14px] font-bold text-[#0f6b60] font-display flex items-center gap-2">
+              <span className="text-[14px] font-bold text-[#0f6b60] font-display group-hover:gap-4 flex items-center gap-2">
                 Explore Technology <span>→</span>
               </span>
             </Link>
 
             <Link href="/services/creative" className="bg-white border border-[#e0e4e0] rounded-2xl p-11 hover:-translate-y-1 hover:shadow-xl hover:border-[#c5f7ef] transition-all group block">
               <div className="w-14 h-14 rounded-2xl bg-[#edfdf9] flex items-center justify-center mb-7 group-hover:bg-[#c5f7ef] transition-colors">
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M14 4L16.5 9.5L22 10.5L18 14.5L19 20L14 17.5L9 20L10 14.5L6 10.5L11.5 9.5L14 4Z" stroke="#0f6b60" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <span className="text-2xl">✨</span>
               </div>
               <h3 className="font-display text-2xl font-bold text-[#181e18] mb-3">Creative & Brand</h3>
               <p className="text-[#5a665a] text-[15px] font-light leading-relaxed mb-7">
@@ -117,7 +113,7 @@ export default function HomePage() {
                   <span key={tag} className="text-xs font-medium text-[#0f6b60] bg-[#edfdf9] border border-[#c5f7ef] px-3 py-1 rounded-full">{tag}</span>
                 ))}
               </div>
-              <span className="text-[14px] font-bold text-[#0f6b60] font-display flex items-center gap-2">
+              <span className="text-[14px] font-bold text-[#0f6b60] font-display group-hover:gap-4 flex items-center gap-2">
                 Explore Creative <span>→</span>
               </span>
             </Link>
