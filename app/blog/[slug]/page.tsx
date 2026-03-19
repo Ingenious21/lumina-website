@@ -76,27 +76,31 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
       </div>
 
-      {/* HERO IMAGE WITH OVERLAID TITLE */}
-      <div className="relative w-full overflow-hidden" style={{ minHeight: '520px', maxHeight: '620px' }}>
+      {/* HERO IMAGE WITH OVERLAID TITLE — 16:4 ratio */}
+      <div className="relative w-full overflow-hidden" style={{ aspectRatio: '16/4' }}>
 
-        {/* Background */}
         {post.coverImage ? (
           <img
-            src={urlFor(post.coverImage).width(1800).height(620).fit('crop').crop('center').url()}
+            src={urlFor(post.coverImage).width(1800).height(450).fit('crop').crop('center').url()}
             alt={post.title}
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0d4f47] to-[#051f1c]"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0d4f47] to-[#051f1c]">
+            <div className="absolute inset-0 opacity-10" style={{
+              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
+              backgroundSize: '24px 24px'
+            }}></div>
+          </div>
         )}
 
         {/* Gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#051f1c] via-[#051f1c]/50 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#051f1c]/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#051f1c] via-[#051f1c]/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#051f1c]/30 to-transparent"></div>
 
         {/* Category badge top left */}
         {post.category && (
-          <div className="absolute top-8 left-[5%]">
+          <div className="absolute top-6 left-[5%]">
             <span className="text-[11px] font-bold px-4 py-2 rounded-full bg-[#27c4a0] text-[#051f1c] tracking-widest uppercase shadow-lg">
               {post.category}
             </span>
@@ -104,7 +108,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         )}
 
         {/* Share buttons top right */}
-        <div className="absolute top-8 right-[5%] flex items-center gap-2">
+        <div className="absolute top-6 right-[5%] flex items-center gap-2">
           <span className="text-white/50 text-[12px] font-light mr-1">Share:</span>
           <a href={`https://twitter.com/intent/tweet?text=${post.title}`} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-[#27c4a0] hover:border-[#27c4a0] transition-all">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -118,30 +122,30 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
 
         {/* Title + meta overlaid at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 px-[5%] pb-12 pt-20">
+        <div className="absolute bottom-0 left-0 right-0 px-[5%] pb-8 pt-16">
           <div className="max-w-[1100px] mx-auto">
-            <h1 className="font-display text-[clamp(28px,4vw,58px)] font-extrabold text-white leading-[1.05] tracking-tight mb-5 max-w-[780px] drop-shadow-lg">
+            <h1 className="font-display text-[clamp(24px,3.5vw,52px)] font-extrabold text-white leading-[1.05] tracking-tight mb-4 max-w-[780px] drop-shadow-lg">
               {post.title}
             </h1>
             {post.excerpt && (
-              <p className="text-white/70 text-[16px] font-light leading-relaxed mb-6 max-w-[620px]">
+              <p className="text-white/70 text-[15px] font-light leading-relaxed mb-5 max-w-[620px]">
                 {post.excerpt}
               </p>
             )}
-            <div className="flex flex-wrap items-center gap-5">
+            <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center gap-3">
-                <img src="/logo.jpg" alt="Lumina Technologies" className="w-10 h-10 rounded-full object-cover border-2 border-[#27c4a0]/50"/>
+                <img src="/logo.jpg" alt="Lumina Technologies" className="w-9 h-9 rounded-full object-cover border-2 border-[#27c4a0]/50"/>
                 <div>
                   <div className="text-white font-semibold text-[13px]">Lumina Technologies</div>
                   <div className="text-white/50 text-[11px] font-light">Author</div>
                 </div>
               </div>
-              <div className="w-px h-6 bg-white/20"></div>
-              <div className="text-white/60 text-[13px] font-light">
+              <div className="w-px h-5 bg-white/20"></div>
+              <div className="text-white/60 text-[12px] font-light">
                 {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''}
               </div>
-              <div className="w-px h-6 bg-white/20"></div>
-              <div className="text-white/60 text-[13px] font-light">5 min read</div>
+              <div className="w-px h-5 bg-white/20"></div>
+              <div className="text-white/60 text-[12px] font-light">5 min read</div>
             </div>
           </div>
         </div>
@@ -227,8 +231,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           {/* SIDEBAR */}
           <div className="flex flex-col gap-6">
-
-            {/* Newsletter */}
             <div className="bg-[#051f1c] rounded-2xl p-7 sticky top-24">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-6 h-0.5 bg-[#27c4a0]"></div>
@@ -250,7 +252,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </button>
             </div>
 
-            {/* Category */}
             {post.category && (
               <div className="bg-[#f8f9f8] border border-[#e0e4e0] rounded-2xl p-6">
                 <div className="text-[11px] font-bold tracking-widest uppercase text-[#9aa49a] mb-3">Category</div>
@@ -260,7 +261,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </div>
             )}
 
-            {/* CTA */}
             <div className="bg-[#0d4f47] rounded-2xl p-6">
               <h3 className="font-display font-bold text-white text-[16px] mb-2">Need help with your business?</h3>
               <p className="text-white/60 text-[13px] font-light leading-relaxed mb-5">
@@ -270,7 +270,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 Get in Touch
               </Link>
             </div>
-
           </div>
         </div>
       </div>

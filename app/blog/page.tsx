@@ -37,85 +37,163 @@ async function getPosts() {
 export default async function BlogPage() {
   const posts = await getPosts()
 
+  const categories = ['All', 'Industry Insight', 'Cybersecurity', 'Branding', 'Data Analysis', 'Lumina Pulse', 'Software']
+
   return (
-    <main>
+    <main className="bg-white">
+
       {/* HERO */}
-      <section className="bg-[#051f1c] pt-[140px] pb-24 px-[5%] relative overflow-hidden">
+      <section className="bg-[#051f1c] pt-[140px] pb-20 px-[5%] relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.06]" style={{
           backgroundImage: 'linear-gradient(rgba(39,196,160,1) 1px, transparent 1px), linear-gradient(90deg, rgba(39,196,160,1) 1px, transparent 1px)',
           backgroundSize: '60px 60px'
         }}></div>
-        <div className="relative z-10 max-w-[1200px] mx-auto">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-0.5 bg-[#27c4a0]"></div>
-            <span className="text-[12px] font-semibold tracking-widest uppercase text-[#27c4a0]">Blog & Insights</span>
+        <div className="relative z-10 max-w-[1100px] mx-auto flex flex-col md:flex-row justify-between items-end gap-8">
+          <div>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-0.5 bg-[#27c4a0]"></div>
+              <span className="text-[12px] font-semibold tracking-widest uppercase text-[#27c4a0]">Blog & Insights</span>
+            </div>
+            <h1 className="font-display text-[clamp(40px,6vw,72px)] font-extrabold text-white leading-tight tracking-tight mb-4">
+              Insights from<br /><span className="text-[#27c4a0]">our team.</span>
+            </h1>
+            <p className="text-white/60 text-[17px] font-light max-w-[480px] leading-relaxed">
+              Tech trends, business tips, and practical guides for Liberian businesses navigating the digital world.
+            </p>
           </div>
-          <h1 className="font-display text-[clamp(40px,6vw,80px)] font-extrabold text-white leading-tight tracking-tight mb-6 max-w-[700px]">
-            Insights from<br />
-            <span className="text-[#27c4a0]">our team.</span>
-          </h1>
-          <p className="text-white/60 text-[18px] font-light max-w-[580px] leading-relaxed">
-            Tech trends, business tips, and practical guides for Liberian businesses navigating the digital world.
-          </p>
+          <div className="flex flex-col items-end gap-3">
+            <div className="text-white/40 text-[12px] font-light uppercase tracking-widest">Total Articles</div>
+            <div className="font-display text-[56px] font-extrabold text-white leading-none">{posts.length}</div>
+          </div>
         </div>
       </section>
 
-      {/* BLOG GRID */}
-      <section className="bg-[#f8f9f8] py-24 px-[5%]">
-        <div className="max-w-[1200px] mx-auto">
-          {posts.length === 0 ? (
-            <div className="text-center py-24">
-              <div className="text-[#9aa49a] text-[16px] font-light">No posts published yet. Check back soon.</div>
-            </div>
-          ) : (
-            <>
-              {/* Featured post */}
-              <Link href={`/blog/${posts[0].slug.current}`} className="group block mb-10">
-                <div className="bg-white border border-[#e0e4e0] rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-xl hover:border-[#c5f7ef] transition-all grid grid-cols-1 md:grid-cols-2">
-                  <div className={`bg-gradient-to-br ${gradients[0]} relative overflow-hidden min-h-[320px]`}>
-                    {posts[0].coverImage ? (
-                      <img
-                        src={urlFor(posts[0].coverImage).width(800).height(600).fit('crop').url()}
-                        alt={posts[0].title}
-                        className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 opacity-10" style={{
-                        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
-                        backgroundSize: '20px 20px'
-                      }}></div>
+      {/* CATEGORIES */}
+      <div className="bg-white border-b border-[#e0e4e0] sticky top-[72px] z-30">
+        <div className="max-w-[1100px] mx-auto px-[5%]">
+          <div className="flex gap-1 overflow-x-auto py-4 scrollbar-hide">
+            {categories.map((cat) => (
+              <button key={cat} className={`px-4 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all ${cat === 'All' ? 'bg-[#0d4f47] text-white' : 'text-[#5a665a] hover:bg-[#f8f9f8] hover:text-[#181e18]'}`}>
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {posts.length === 0 ? (
+        <div className="text-center py-32">
+          <div className="text-[#9aa49a] text-[16px] font-light">No posts published yet. Check back soon.</div>
+        </div>
+      ) : (
+        <>
+          {/* FEATURED + TOP READS */}
+          <section className="py-14 px-[5%]">
+            <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+
+              {/* Featured large post */}
+              <Link href={`/blog/${posts[0].slug.current}`} className="group md:col-span-2 block bg-white border border-[#e0e4e0] rounded-2xl overflow-hidden hover:shadow-xl hover:border-[#c5f7ef] hover:-translate-y-1 transition-all">
+                <div className={`h-64 bg-gradient-to-br ${gradients[0]} relative overflow-hidden`}>
+                  {posts[0].coverImage ? (
+                    <img
+                      src={urlFor(posts[0].coverImage).width(900).height(400).fit('crop').crop('center').url()}
+                      alt={posts[0].title}
+                      className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 opacity-10" style={{
+                      backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
+                      backgroundSize: '20px 20px'
+                    }}></div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-[#27c4a0] text-[#051f1c]">Featured</span>
+                    {posts[0].category && (
+                      <span className={`text-[11px] font-bold px-3 py-1 rounded-full ${categoryColors[posts[0].category] || 'bg-[#edfdf9] text-[#0f6b60]'}`}>
+                        {posts[0].category}
+                      </span>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                    <div className="absolute top-4 left-4 bg-[#27c4a0] text-[#051f1c] text-[11px] font-bold px-3 py-1 rounded-full z-10">
-                      Featured
-                    </div>
                   </div>
-                  <div className="p-10 flex flex-col justify-center">
-                    <span className={`text-[11px] font-bold px-3 py-1 rounded-full inline-block w-fit mb-4 ${categoryColors[posts[0].category] || 'bg-[#edfdf9] text-[#0f6b60]'}`}>
-                      {posts[0].category}
-                    </span>
-                    <h2 className="font-display text-[24px] font-bold text-[#181e18] leading-tight mb-4 group-hover:text-[#0f6b60] transition-colors">
-                      {posts[0].title}
-                    </h2>
-                    <p className="text-[#5a665a] text-[15px] font-light leading-relaxed mb-6">
-                      {posts[0].excerpt}
-                    </p>
-                    <div className="text-[13px] text-[#9aa49a]">
-                      {posts[0].publishedAt ? new Date(posts[0].publishedAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : ''}
-                    </div>
+                </div>
+                <div className="p-7">
+                  <div className="text-[12px] text-[#9aa49a] font-light mb-3">
+                    {posts[0].publishedAt ? new Date(posts[0].publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''} · 5 min read
+                  </div>
+                  <h2 className="font-display text-[22px] font-bold text-[#181e18] leading-tight mb-3 group-hover:text-[#0f6b60] transition-colors">
+                    {posts[0].title}
+                  </h2>
+                  <p className="text-[#5a665a] text-[14px] font-light leading-relaxed mb-4">
+                    {posts[0].excerpt}
+                  </p>
+                  <div className="flex items-center gap-2 text-[#0f6b60] text-[13px] font-semibold">
+                    Read More
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
                 </div>
               </Link>
 
-              {/* Rest of posts */}
+              {/* Top reads sidebar */}
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-6 h-0.5 bg-[#27c4a0]"></div>
+                  <span className="text-[12px] font-bold tracking-widest uppercase text-[#138a7a]">Top Reads</span>
+                </div>
+                {posts.slice(1, 4).map((post: any, i: number) => (
+                  <Link key={post._id} href={`/blog/${post.slug.current}`} className="group flex gap-4 p-4 bg-[#f8f9f8] border border-[#e0e4e0] rounded-xl hover:border-[#27c4a0] hover:shadow-md transition-all">
+                    <div className={`w-20 h-20 bg-gradient-to-br ${gradients[(i + 1) % gradients.length]} rounded-lg flex-shrink-0 relative overflow-hidden`}>
+                      {post.coverImage ? (
+                        <img
+                          src={urlFor(post.coverImage).width(160).height(160).fit('crop').crop('center').url()}
+                          alt={post.title}
+                          className="absolute inset-0 w-full h-full object-cover object-center"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 opacity-10" style={{
+                          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
+                          backgroundSize: '10px 10px'
+                        }}></div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      {post.category && (
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full inline-block mb-1 ${categoryColors[post.category] || 'bg-[#edfdf9] text-[#0f6b60]'}`}>
+                          {post.category}
+                        </span>
+                      )}
+                      <h3 className="font-display font-bold text-[#181e18] text-[14px] leading-snug mb-1 group-hover:text-[#0f6b60] transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <div className="text-[11px] text-[#9aa49a] font-light">
+                        {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* DIVIDER */}
+          <div className="max-w-[1100px] mx-auto px-[5%]">
+            <div className="flex items-center gap-4">
+              <div className="flex-1 h-px bg-[#e0e4e0]"></div>
+              <span className="text-[11px] font-bold tracking-widest uppercase text-[#9aa49a]">Browse by Category</span>
+              <div className="flex-1 h-px bg-[#e0e4e0]"></div>
+            </div>
+          </div>
+
+          {/* ALL POSTS GRID */}
+          <section className="py-14 px-[5%]">
+            <div className="max-w-[1100px] mx-auto">
               {posts.length > 1 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {posts.slice(1).map((post: any, i: number) => (
                     <Link key={post._id} href={`/blog/${post.slug.current}`} className="group block bg-white border border-[#e0e4e0] rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-xl hover:border-[#c5f7ef] transition-all">
-                      <div className={`h-52 bg-gradient-to-br ${gradients[(i + 1) % gradients.length]} relative overflow-hidden`}>
+                      <div className={`h-48 bg-gradient-to-br ${gradients[(i + 1) % gradients.length]} relative overflow-hidden`}>
                         {post.coverImage ? (
                           <img
-                            src={urlFor(post.coverImage).width(600).height(400).fit('crop').url()}
+                            src={urlFor(post.coverImage).width(600).height(320).fit('crop').crop('center').url()}
                             alt={post.title}
                             className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                           />
@@ -126,34 +204,40 @@ export default async function BlogPage() {
                           }}></div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-                        <div className="absolute top-4 left-4 z-10">
-                          <span className={`text-[11px] font-bold px-3 py-1 rounded-full ${categoryColors[post.category] || 'bg-[#edfdf9] text-[#0f6b60]'}`}>
-                            {post.category}
-                          </span>
+                        <div className="absolute top-4 left-4">
+                          {post.category && (
+                            <span className={`text-[11px] font-bold px-3 py-1 rounded-full ${categoryColors[post.category] || 'bg-[#edfdf9] text-[#0f6b60]'}`}>
+                              {post.category}
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div className="p-6">
+                        <div className="text-[12px] text-[#9aa49a] font-light mb-2">
+                          {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''} · 5 min read
+                        </div>
                         <h3 className="font-display text-[17px] font-bold text-[#181e18] leading-tight mb-3 group-hover:text-[#0f6b60] transition-colors">
                           {post.title}
                         </h3>
-                        <p className="text-[#5a665a] text-[14px] font-light leading-relaxed mb-4">
+                        <p className="text-[#5a665a] text-[13px] font-light leading-relaxed mb-4 line-clamp-2">
                           {post.excerpt}
                         </p>
-                        <div className="text-[12px] text-[#9aa49a]">
-                          {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : ''}
+                        <div className="flex items-center gap-2 text-[#0f6b60] text-[12px] font-semibold">
+                          Read More
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                         </div>
                       </div>
                     </Link>
                   ))}
                 </div>
               )}
-            </>
-          )}
-        </div>
-      </section>
+            </div>
+          </section>
+        </>
+      )}
 
       {/* NEWSLETTER */}
-      <section className="bg-[#0d4f47] py-24 px-[5%] relative overflow-hidden">
+      <section className="bg-[#0d4f47] py-20 px-[5%] relative overflow-hidden">
         <div className="absolute inset-0 opacity-5" style={{
           backgroundImage: 'linear-gradient(rgba(39,196,160,1) 1px, transparent 1px), linear-gradient(90deg, rgba(39,196,160,1) 1px, transparent 1px)',
           backgroundSize: '48px 48px'
@@ -164,7 +248,7 @@ export default async function BlogPage() {
             <span className="text-[12px] font-semibold tracking-widest uppercase text-[#27c4a0]">Lumina Pulse</span>
             <div className="w-8 h-0.5 bg-[#27c4a0]"></div>
           </div>
-          <h2 className="font-display text-[clamp(28px,4vw,48px)] font-extrabold text-white tracking-tight leading-tight mb-4">
+          <h2 className="font-display text-[clamp(28px,4vw,44px)] font-extrabold text-white tracking-tight leading-tight mb-4">
             Get monthly insights delivered
           </h2>
           <p className="text-white/60 text-[16px] font-light mb-8">
@@ -182,6 +266,7 @@ export default async function BlogPage() {
           </div>
         </div>
       </section>
+
     </main>
   )
 }
